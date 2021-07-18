@@ -13,62 +13,66 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue.shade600,
-        foregroundColor: Colors.white,
-        brightness: Brightness.dark,
-        elevation: 0,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Ionicons.ellipsis_vertical),
-            color: Colors.white,
-            splashRadius: 20.0,
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: SlidingUpPanel(
-        minHeight: 250.0,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(24.0),
+    super.build(context);
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue.shade600,
+          foregroundColor: Colors.white,
+          brightness: Brightness.dark,
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Ionicons.ellipsis_vertical),
+              color: Colors.white,
+              splashRadius: 20.0,
+              onPressed: () {},
+            ),
+          ],
         ),
-        panelBuilder: (ScrollController sc) => _scrollingList(sc),
-        body: Container(
-          color: Colors.blue.shade600,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Total Current Balance",
-                      style: GoogleFonts.rubik(
-                          textStyle: Theme.of(context).textTheme.bodyText1,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Rp1.500K",
-                      style: GoogleFonts.rubik(
-                          textStyle: Theme.of(context).textTheme.headline3,
-                          fontWeight: FontWeight.w600,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                const CataikBarChart(),
-              ],
+        body: SlidingUpPanel(
+          minHeight: 250.0,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
+          ),
+          panelBuilder: (ScrollController sc) => _scrollingList(sc),
+          body: Container(
+            color: Colors.blue.shade600,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Total Current Balance",
+                        style: GoogleFonts.rubik(
+                            textStyle: Theme.of(context).textTheme.bodyText1,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Rp1.500K",
+                        style: GoogleFonts.rubik(
+                            textStyle: Theme.of(context).textTheme.headline3,
+                            fontWeight: FontWeight.w600,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  const CataikBarChart(),
+                ],
+              ),
             ),
           ),
         ),
@@ -164,4 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+class OverviewScreen extends StatefulWidget {
+  const OverviewScreen({Key? key}) : super(key: key);
 
   @override
-  _HistoryScreenState createState() => _HistoryScreenState();
+  _OverviewScreenState createState() => _OverviewScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _OverviewScreenState extends State<OverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,7 +28,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ],
         ),
         body: Container(
-          color: Colors.red,
+          color: Colors.blue,
         ),
       ),
     );

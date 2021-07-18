@@ -1,7 +1,6 @@
+import 'package:cataik/views/components/navigator.dart';
 import 'package:flutter/material.dart';
-import 'package:cataik/models/destination.dart';
-import 'package:cataik/utils/destinations.dart';
-import 'package:cataik/views/router.dart' as main_router;
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({Key? key}) : super(key: key);
@@ -10,95 +9,92 @@ class MainLayout extends StatefulWidget {
   _MainLayoutState createState() => _MainLayoutState();
 }
 
-class _MainLayoutState extends State<MainLayout>
-    with TickerProviderStateMixin<MainLayout> {
-  late List<Key> _destinationKeys;
-  late List<AnimationController> _faders;
-  int _currentIndex = 0;
+class _MainLayoutState extends State<MainLayout> {
+  String _currentPage = "Home";
+  List<String> pageKeys = ["Home", "Overview", "History", "Setting"];
+  final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+    "Home": GlobalKey<NavigatorState>(),
+    "Overview": GlobalKey<NavigatorState>(),
+    "History": GlobalKey<NavigatorState>(),
+    "Setting": GlobalKey<NavigatorState>(),
+  };
+  int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _faders = allDestinations.map<AnimationController>(
-      (Destination destination) {
-        return AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 200),
-        );
-      },
-    ).toList();
-    _faders[_currentIndex].value = 1.0;
-    _destinationKeys = List<Key>.generate(
-      allDestinations.length,
-      (int index) => GlobalKey(),
-    ).toList();
-  }
-
-  @override
-  void dispose() {
-    for (final AnimationController controller in _faders) {
-      controller.dispose();
+  void _selectTab(String tabItem, int index) {
+    if (tabItem == _currentPage) {
+      _navigatorKeys[tabItem]!.currentState?.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _currentPage = pageKeys[index];
+        _selectedIndex = index;
+      });
     }
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          fit: StackFit.expand,
-          children: allDestinations.map((Destination destination) {
-            final Widget view = FadeTransition(
-              opacity: _faders[destination.index].drive(
-                CurveTween(curve: Curves.fastOutSlowIn),
-              ),
-              child: KeyedSubtree(
-                key: _destinationKeys[destination.index],
-                child: main_router.Router(
-                  destination: destination,
-                ),
-              ),
-            );
-            print(_faders);
-            if (destination.index == _currentIndex) {
-              _faders[destination.index].forward();
-              return view;
-            } else {
-              _faders[destination.index].reverse();
-              if (_faders[destination.index].isAnimating) {
-                return IgnorePointer(child: view);
-              }
-              return Offstage(child: view);
-            }
-          }).toList(),
+    return WillPopScope(
+      onWillPop: () async {
+        final isFirstRouteInCurrentTab =
+            !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+        if (isFirstRouteInCurrentTab) {
+          if (_currentPage != "Home") {
+            _selectTab("Home", 1);
+
+            return false;
+          }
+        }
+
+        return isFirstRouteInCurrentTab;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            _buildOffstageNavigator("Home"),
+            _buildOffstageNavigator("Overview"),
+            _buildOffstageNavigator("History"),
+            _buildOffstageNavigator("Setting"),
+          ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: allDestinations.map((Destination destination) {
-          return BottomNavigationBarItem(
-            icon: Icon(destination.icon),
-            backgroundColor: destination.color,
-            label: destination.title,
-          );
-        }).toList(),
-        currentIndex: _currentIndex,
-        selectedItemColor: Colors.blue.shade800,
-        unselectedItemColor: Colors.blue.shade200,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        onTap: _onItemTapped,
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.blue.shade800,
+          unselectedItemColor: Colors.blue.shade200,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          onTap: (int index) {
+            _selectTab(pageKeys[index], index);
+          },
+          currentIndex: _selectedIndex,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(FeatherIcons.home),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FeatherIcons.pieChart),
+              label: "Overview",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FeatherIcons.refreshCcw),
+              label: "History",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FeatherIcons.user),
+              label: "Setting",
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void _onItemTapped(int index) {
-    if (_currentIndex != index) {
-      setState(() {
-        _currentIndex = index;
-      });
-    }
+  Widget _buildOffstageNavigator(String tabItem) {
+    return Offstage(
+      offstage: _currentPage != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem]!,
+        tabItem: tabItem,
+      ),
+    );
   }
 }
