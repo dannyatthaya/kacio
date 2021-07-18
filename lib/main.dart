@@ -2,6 +2,7 @@ import 'package:cataik/views/main_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sleek_button/sleek_button.dart';
 
 void main() {
   runApp(Main());
@@ -11,8 +12,8 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.blue.shade600,
-      systemNavigationBarColor: Colors.blue.shade600,
+      statusBarColor: Colors.blue.shade400,
+      systemNavigationBarColor: Colors.blue.shade400,
     ));
     return MaterialApp(
       title: 'Cataik',
@@ -73,12 +74,28 @@ class Main extends StatelessWidget {
             letterSpacing: 1.25,
           ),
           caption: GoogleFonts.rubik(
-              fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            letterSpacing: 0.4,
+          ),
           overline: GoogleFonts.rubik(
-              fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+            fontSize: 10,
+            fontWeight: FontWeight.w400,
+            letterSpacing: 1.5,
+          ),
         ),
       ),
-      home: const MainLayout(),
+      home: SleekButtonTheme(
+        data: SleekButtonThemeData(
+          padding: 18,
+          textStyle: const TextStyle(fontSize: 11),
+          cornerRadius: 16.0,
+          iconTheme: const IconThemeData(size: 20),
+          fill: Colors.lightBlue.shade800,
+          borderWidth: 0,
+        ),
+        child: const MainLayout(),
+      ),
     );
   }
 }

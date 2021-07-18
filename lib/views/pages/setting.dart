@@ -28,7 +28,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ],
         ),
         body: Container(
-          color: Colors.red,
+          color: Colors.green,
         ),
       ),
     );

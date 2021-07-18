@@ -1,13 +1,9 @@
 import 'package:cataik/views/pages/history.dart';
 import 'package:cataik/views/pages/home.dart';
-import 'package:cataik/views/pages/overview.dart';
+import 'package:cataik/views/pages/statistic.dart';
+import 'package:cataik/views/pages/setting.dart';
 import 'package:cataik/views/pages/unknown_page.dart';
 import 'package:flutter/material.dart';
-
-class TabNavigatorRoutes {
-  static const String root = '/';
-  static const String detail = '/detail';
-}
 
 class TabNavigator extends StatelessWidget {
   const TabNavigator({required this.navigatorKey, required this.tabItem});
@@ -19,10 +15,12 @@ class TabNavigator extends StatelessWidget {
     Widget child;
     if (tabItem == "Home") {
       child = const HomeScreen();
-    } else if (tabItem == "Overview") {
+    } else if (tabItem == "Statistic") {
       child = const OverviewScreen();
     } else if (tabItem == "History") {
       child = const HistoryScreen();
+    } else if (tabItem == "Setting") {
+      child = const SettingScreen();
     } else {
       child = UnknownPage();
     }

@@ -30,6 +30,7 @@ dependencies:
   google_fonts: ^2.1.0
   ionicons: ^0.1.2
   lint: ^1.5.3
+  sleek_button: ^0.2.0
   sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:

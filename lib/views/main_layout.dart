@@ -11,10 +11,10 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   String _currentPage = "Home";
-  List<String> pageKeys = ["Home", "Overview", "History", "Setting"];
+  List<String> pageKeys = ["Home", "Statistic", "History", "Setting"];
   final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "Home": GlobalKey<NavigatorState>(),
-    "Overview": GlobalKey<NavigatorState>(),
+    "Statistic": GlobalKey<NavigatorState>(),
     "History": GlobalKey<NavigatorState>(),
     "Setting": GlobalKey<NavigatorState>(),
   };
@@ -51,12 +51,14 @@ class _MainLayoutState extends State<MainLayout> {
         body: Stack(
           children: <Widget>[
             _buildOffstageNavigator("Home"),
-            _buildOffstageNavigator("Overview"),
+            _buildOffstageNavigator("Statistic"),
             _buildOffstageNavigator("History"),
             _buildOffstageNavigator("Setting"),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.shifting,
           selectedItemColor: Colors.blue.shade800,
           unselectedItemColor: Colors.blue.shade200,
           showSelectedLabels: false,
@@ -72,7 +74,7 @@ class _MainLayoutState extends State<MainLayout> {
             ),
             BottomNavigationBarItem(
               icon: Icon(FeatherIcons.pieChart),
-              label: "Overview",
+              label: "Statistic",
             ),
             BottomNavigationBarItem(
               icon: Icon(FeatherIcons.refreshCcw),
